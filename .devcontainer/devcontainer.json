@@ -1,0 +1,11 @@
+{
+  "name": "Wynn Backend Dev",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "workspaceFolder": "/workspace",
+  "forwardPorts": [8369],
+  "remoteEnv": {
+    "ANTHROPIC_API_KEY": "${localEnv:ANTHROPIC_API_KEY}"
+  }
+}
