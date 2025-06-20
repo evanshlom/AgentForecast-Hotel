@@ -1,0 +1,8 @@
+# Forecast Agent
+anthropic
+python-dateutil
+
+# RNN Forecast
+numpy
+pandas
+matplotlib
