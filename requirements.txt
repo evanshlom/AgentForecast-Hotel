@@ -6,3 +6,7 @@ python-dateutil
 numpy
 pandas
 matplotlib
+
+# Notebooks
+jupyter
+ipykernel
