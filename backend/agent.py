@@ -9,48 +9,22 @@ class ForecastAgent:
         self.client = anthropic.Client(api_key=os.environ.get('ANTHROPIC_API_KEY'))
         self.conversation_history = []
     
-    def get_next_monday(self):
-        """Helper to find next Monday"""
-        today = datetime.now().date()
-        days_ahead = 0 - today.weekday()
-        if days_ahead <= 0:
-            days_ahead += 7
-        return today + timedelta(days_ahead)
-    
-    def parse_date_reference(self, date_str, base_date=None):
-        """Parse natural language date references"""
-        if not base_date:
-            base_date = datetime.now().date()
-        
-        date_str = date_str.lower()
-        
-        if "tomorrow" in date_str:
-            return base_date + timedelta(days=1)
-        elif "next week" in date_str or "next monday" in date_str:
-            return self.get_next_monday()
-        elif "this weekend" in date_str:
-            days_until_saturday = (5 - base_date.weekday()) % 7
-            if days_until_saturday == 0:
-                days_until_saturday = 7
-            return base_date + timedelta(days=days_until_saturday)
-        elif "fight night" in date_str or "fight weekend" in date_str:
-            # Typically Saturday
-            days_until_saturday = (5 - base_date.weekday()) % 7
-            if days_until_saturday == 0:
-                days_until_saturday = 7
-            return base_date + timedelta(days=days_until_saturday)
-        
-        # Default to tomorrow
-        return base_date + timedelta(days=1)
-    
     def process_message(self, message, current_forecast=None):
         """Process user message and return adjustments with detailed explanation"""
         self.conversation_history.append({"role": "user", "content": message})
         
+        # Build conversation context
+        conversation_context = ""
+        if len(self.conversation_history) > 1:
+            conversation_context = "Previous conversation:\n"
+            for msg in self.conversation_history[:-1]:  # All except the current message
+                conversation_context += f"{msg['role'].capitalize()}: {msg['content']}\n"
+            conversation_context += "\nIf there were previous modifications discussed, acknowledge them with 'In addition to previous changes to the forecast, ' before your response.\n\n"
+        
         prompt = f"""You are an AI assistant for Wynn Resort Las Vegas operations forecasting. 
     Analyze the user's message about hotel operations and provide recommendations.
 
-    User message: "{message}"
+    {conversation_context}User message: "{message}"
     Today's date: {datetime.now().date()}
     Forecast period: Next 168 hours (7 days)
 
@@ -111,16 +85,13 @@ class ForecastAgent:
                 
                 self.conversation_history.append({"role": "assistant", "content": result['response']})
                 return result
-            
-        except Exception as e:
-            print(f"Agent error: {e}")
-            
+         
         except Exception as e:
             print(f"Agent error: {e}")
         
         # Fallback response
         fallback = {
-            "response": "I understand you're asking about resort operations. Could you be more specific about what changes you'd like to make to the forecast?",
+            "response": "I understand you're asking about Wynn resort operations. Could you be more specific about what changes you'd like to make to the forecast?",
             "modifications": []
         }
         self.conversation_history.append({"role": "assistant", "content": fallback['response']})
