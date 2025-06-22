@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Character encoding for text display -->
+    <meta charset="UTF-8">
+    <!-- Responsive design: ensures proper scaling on mobile devices -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wynn Resort Forecast AI - Skeleton</title>
+    
+    <!-- ========== EXTERNAL DEPENDENCIES (Order matters!) ========== -->
+    
+    <!-- 1. React Core Library - The main React framework -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    
+    <!-- 2. ReactDOM - Bridges React with the browser DOM -->
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    
+    <!-- 3. Babel - Converts JSX syntax to regular JavaScript in the browser -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- 4. Chart.js - Data visualization library for the forecast chart -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js"></script>
+    
+    <!-- ========== EMBEDDED STYLES ========== -->
+    <style>
+        /* === GLOBAL RESET & DEFAULTS === */
+        body {
+            margin: 0;  /* Remove default browser margins */
+            /* System font stack for native look on each OS */
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f5f5f5;  /* Light gray background */
+        }
+        
+        /* === MAIN LAYOUT STRUCTURE === */
+        
+        /* Top-level container using flexbox for side-by-side layout */
+        .container {
+            display: flex;          /* Enables flex layout */
+            height: 100vh;          /* Full viewport height */
+        }
+        
+        /* Left sidebar for chat interface */
+        .chat-panel {
+            width: 400px;           /* Fixed width */
+            background: white;
+            border-right: 1px solid #e0e0e0;  /* Subtle separator */
+            display: flex;
+            flex-direction: column;  /* Stack children vertically */
+        }
+        
+        /* Right side for chart display */
+        .chart-panel {
+            flex: 1;                /* Takes remaining space */
+            padding: 20px;
+            display: flex;
+            align-items: center;    /* Center vertically */
+            justify-content: center; /* Center horizontally */
+        }
+        
+        /* === CHAT UI COMPONENTS === */
+        
+        /* Chat header bar */
+        .chat-header {
+            padding: 20px;
+            background: #8B4513;    /* Saddle Brown - Wynn brand color */
+            color: white;
+            font-weight: bold;
+        }
+        
+        /* Scrollable message area */
+        .chat-messages {
+            flex: 1;                /* Takes available vertical space */
+            overflow-y: auto;       /* Enables vertical scrolling */
+            padding: 20px;
+            background: #fafafa;    /* Slightly darker than white */
+        }
+        
+        /* Base styling for all messages */
+        .message {
+            margin-bottom: 15px;    /* Space between messages */
+            padding: 10px 15px;
+            border-radius: 10px;    /* Rounded corners */
+            max-width: 80%;         /* Prevents full-width messages */
+        }
+        
+        /* User messages - aligned right */
+        .user-message {
+            background: #daa520;    /* Goldenrod color */
+            color: white;
+            margin-left: auto;      /* Pushes to right side */
+        }
+        
+        /* AI messages - aligned left (default) */
+        .ai-message {
+            background: #ecf0f1;    /* Light gray */
+            color: #2c3e50;         /* Dark gray text */
+        }
+        
+        /* Input area at bottom of chat */
+        .chat-input {
+            padding: 20px;
+            border-top: 1px solid #e0e0e0;  /* Separator line */
+            display: flex;
+            gap: 10px;              /* Space between input and button */
+        }
+        
+        /* === FORM ELEMENTS === */
+        
+        /* Text input field */
+        input {
+            flex: 1;                /* Takes available width */
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 25px;    /* Pill shape */
+            outline: none;          /* Removes focus outline */
+            font-size: 14px;
+        }
+        
+        /* Send button */
+        button {
+            padding: 10px 20px;
+            background: #8B4513;    /* Matches header color */
+            color: white;
+            border: none;
+            border-radius: 25px;    /* Pill shape */
+            cursor: pointer;        /* Hand cursor on hover */
+            font-size: 14px;
+        }
+        
+        /* Button hover state */
+        button:hover {
+            background: #A0522D;    /* Lighter brown */
+        }
+        
+        /* Disabled button state */
+        button:disabled {
+            background: #ccc;       /* Gray */
+            cursor: not-allowed;    /* Shows not-allowed cursor */
+        }
+        
+        /* === CHART DISPLAY AREA === */
+        
+        /* White card container for chart */
+        .chart-container {
+            width: 100%;
+            max-width: 1000px;      /* Prevents too-wide charts */
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);  /* Subtle shadow */
+        }
+        
+        /* Constrains chart height */
+        canvas {
+            max-height: 400px;
+        }
+        
+        /* Chart title styling */
+        h2 {
+            margin: 0 0 20px 0;     /* No top margin, 20px bottom */
+            color: #2c3e50;         /* Dark gray */
+        }
+        
+        /* Placeholder text when no data */
+        .placeholder {
+            text-align: center;
+            color: #999;            /* Light gray */
+            padding: 40px;
+        }
+    </style>
+</head>
+<body>
+    <!-- React will mount the entire app here -->
+    <div id="root"></div>
+    
+    <!-- Load and execute the React app -->
+    <!-- type="text/babel" tells Babel to transpile this file -->
+    <script type="text/babel" src="app.jsx"></script>
+</body>
+</html>
